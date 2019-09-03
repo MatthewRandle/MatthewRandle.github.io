@@ -3,6 +3,56 @@
     <body>
         <h1>Hello World!</h1>
         <div data-verify="randle.matthew@hotmail.co.uk"></div>
-        <iframe src="http://localhost:3000/comment-section" frameborder="0"></iframe>
+        <iframe id="test" src="http://localhost:3000/comment-section/123" frameborder="0"></iframe>
+        <button onclick="signIn()">Sign In</button>
+        <button onclick="logout()">Logout</button>
+        <div data-verify="randle.matthew@hotmail.co.uk"></div>
     </body>
+
+    <script>
+        getToken();
+        function getToken() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(JSON.parse(this.response).token);
+                }
+            };
+            xhttp.withCredentials = true;
+            xhttp.open("GET", "http://localhost:3000/api/auth/get-user", true);
+            xhttp.send();
+        }
+
+        function signIn() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', "http://localhost:3000/api/auth/sign-in", true);
+            xhr.onload = function () {
+            if (xhr.status === 200 && xhr.readyState === 4) {
+                    console.log(JSON.parse(this.response).token);
+                }
+            };
+
+            const params = { email: "lesleysovvy@gmail.com", password: "Sovvy1921!!" };
+            let query = "";
+            for (key in params) {
+                query += encodeURIComponent(key)+"="+encodeURIComponent(params[key])+"&";
+            }
+
+            xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
+            xhr.withCredentials = true;
+            xhr.send(query);
+        }
+
+        function logout() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    
+                }
+            };
+            xhttp.withCredentials = true;
+            xhttp.open("GET", "http://localhost:3000/api/auth/logout", true);
+            xhttp.send();
+        }
+    </script>
 </html>
