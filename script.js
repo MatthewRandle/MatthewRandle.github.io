@@ -1,14 +1,7 @@
 let commentSection = document.getElementById("commentSection");
-let signInButton = document.createElement("button");
-signInButton.innerHTML = "Sign in to comment";
-let signUpButton = document.createElement("button");
-signUpButton.innerHTML = "Sign up to comment";
-commentSection.appendChild(signInButton);
-commentSection.appendChild(signUpButton);
 let iframe;
 
-createFrame("testtoken");
-/* getUserToken();
+getUserToken();
 
 function getUserToken() {
     var xhttp = new XMLHttpRequest();
@@ -20,33 +13,53 @@ function getUserToken() {
     xhttp.withCredentials = true;
     xhttp.open("GET", "http://localhost:3000/api/auth/get-user-token", true);
     xhttp.send();
-} */
+}
 
-function createFrame(userToken) {
+function createFrame(userToken) { 
     iframe == null ? iframe = document.createElement("iframe") : null;
     iframe.style.width = "100%";
-    iframe.style.height = "100vh";
+    iframe.style.border = "none";
 
     if(userToken) {
-        iframe.setAttribute("src", `http://localhost:3000/comment-section/${userToken}`);
+        iframe.setAttribute("src", `http://localhost:3000/comment-section/${userToken}/#351`);
     }
     else {
         iframe.setAttribute("src", "http://localhost:3000/comment-section");
     }
 
+    iframe.setAttribute("scrolling", "no");
+    iframe.id = "commentSectionFrame";
     commentSection.appendChild(iframe);
+    iFrameResize({ 
+        onMessage: (data) => {
+            if(data.message === "logout") logout();
+            else if(data.message === "sign-in") {
+                signIn();
+                window.location.href = "/courses/?commentID=351";
+            }
+            else if(data.message === "sign-up") signUp();
+        },
+        onResized: ({ iframe }) => {
+            //search for the commentID in the query
+            var result = null, tmp = [];
+            window.location.search
+                .substr(1)
+                .split("&")
+                .forEach(function (item) {
+                    tmp = item.split("=");
+                    if (tmp[0] === "commentID") result = decodeURIComponent(tmp[1]);
+                });
+            iframe.iFrameResizer.moveToAnchor(result);
+        }
+    }, "#commentSectionFrame");
 }
-
-signInButton.addEventListener("click", () => {
-    signIn();
-});
 
 function signIn() {
     var xhr = new XMLHttpRequest();
     xhr.open('POST', "http://localhost:3000/api/auth/sign-in", true);
     xhr.onload = function () {
-    if (xhr.status === 200 && xhr.readyState === 4) {
-            createFrame(JSON.parse(this.response).token);
+        if (xhr.status === 200 && xhr.readyState === 4) {
+            iframe.setAttribute("src", `http://localhost:3000/comment-section/${JSON.parse(this.response).token}`)
         }
     };
 
@@ -60,10 +73,6 @@ function signIn() {
     xhr.withCredentials = true;
     xhr.send(query);
 }
-
-signUpButton.addEventListener("click", () => {
-    signUp();
-});
 
 function signUp() {
     var xhr = new XMLHttpRequest();
@@ -85,3 +94,16 @@ function signUp() {
     xhr.withCredentials = true;
     xhr.send(query);
 }
+
+function logout() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.withCredentials = true;
+    xhttp.open("GET", "http://localhost:3000/api/auth/logout", true);
+    xhttp.send();
+
+    xhttp.onload = function () {
+        if (xhttp.status === 200 && xhttp.readyState === 4) {
+            iframe.src=`http://localhost:3000/comment-section`;
+        }
+    };
+} 
