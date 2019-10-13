@@ -1,5 +1,5 @@
-let commentSection = document.getElementById("commentSection");
-let iframe;
+let accountPreview = document.getElementById("accountPreview");
+let accountPreviewIFrame;
 
 getUserToken();
 
@@ -16,31 +16,28 @@ function getUserToken() {
 }
 
 function createFrame(userToken) { 
-    iframe == null ? iframe = document.createElement("iframe") : null;
-    iframe.style.width = "100%";
-    iframe.style.border = "none";
+    accountPreviewIFrame == null ? accountPreviewIFrame = document.createElement("iframe") : null;
+    accountPreviewIFrame.style.width = "100%";
+    accountPreviewIFrame.style.border = "none";
 
     if(userToken) {
-        iframe.setAttribute("src", `http://localhost:3000/embed/comment-section/${userToken}`);
+        accountPreviewIFrame.setAttribute("src", `http://localhost:3000/embed/account-preview/${userToken}`);
     }
     else {
-        iframe.setAttribute("src", "http://localhost:3000/embed/comment-section");
+        accountPreviewIFrame.setAttribute("src", "http://localhost:3000/embed/account-preview");
     }
 
-    iframe.setAttribute("scrolling", "no");
-    iframe.id = "commentSectionFrame";
-    commentSection.appendChild(iframe);
+    accountPreviewIFrame.setAttribute("scrolling", "no");
+    accountPreviewIFrame.id = "accountPreviewFrame";
+    accountPreview.appendChild(accountPreviewIFrame);
     iFrameResize({ 
         onMessage: (data) => {
-            if(data.message.command === "logout") logout(); 
-            else if(data.message.command === "sign-in") {
+            if(data.message === "logout") logout();
+            else if(data.message === "sign-in") {
                 signIn();
-                //window.location.href = "/courses.html?commentID=351";
+                //window.location.href = "/courses/?commentID=351";
             }
-            else if(data.message.command === "sign-up") signUp();
-            else if(data.message.command === "link") {
-                window.location.href = data.message.link;
-            }
+            else if(data.message === "sign-up") signUp();
         },
         onResized: ({ iframe }) => {
             //search for the commentID in the query
@@ -52,10 +49,9 @@ function createFrame(userToken) {
                     tmp = item.split("=");
                     if (tmp[0] === "commentID") result = decodeURIComponent(tmp[1]);
                 });
-
             if (result) iframe.iFrameResizer.moveToAnchor(result);
         }
-    }, "#commentSectionFrame");
+    }, "#accountPreviewFrame");
 }
 
 function signIn() {
@@ -63,7 +59,7 @@ function signIn() {
     xhr.open('POST', "http://localhost:3000/api/auth/sign-in", true);
     xhr.onload = function () {
         if (xhr.status === 200 && xhr.readyState === 4) {
-            iframe.setAttribute("src", `http://localhost:3000/embed/comment-section/${JSON.parse(this.response).token}`)
+            accountPreviewIFrame.setAttribute("src", `http://localhost:3000/embed/account-preview/${JSON.parse(this.response).token}`)
         }
     };
 
@@ -88,7 +84,7 @@ function signUp() {
         }
     };
 
-    const params = { email: "randle.matthew@hotmail.co.uk", password: "Sovvy1921!!", username: "Caitlin" };
+    const params = { email: "randle.matthew@hotmail.co.uk", password: "Sovvy1921!!" };
     let query = "";
     for (key in params) {
         query += encodeURIComponent(key) + "=" + encodeURIComponent(params[key]) + "&";
@@ -107,7 +103,7 @@ function logout() {
 
     xhttp.onload = function () {
         if (xhttp.status === 200 && xhttp.readyState === 4) {
-            iframe.src=`http://localhost:3000/embed/comment-section`;
+            accountPreviewIFrame.src=`http://localhost:3000/embed/account-preview`;
         }
     };
 } 
