@@ -1,21 +1,9 @@
 let commentSection = document.getElementById("commentSection");
 let iframe;
 
-getUserToken();
+createFrame();
 
-function getUserToken() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            createFrame(JSON.parse(this.response).token);
-        }
-    };
-    xhttp.withCredentials = true;
-    xhttp.open("GET", "http://localhost:3000/api/auth/get-user-token", true);
-    xhttp.send();
-}
-
-function createFrame(userToken) { 
+function createFrame() { 
     iframe == null ? iframe = document.createElement("iframe") : null;
     iframe.style.width = "100%";
     iframe.style.border = "none";
@@ -29,7 +17,7 @@ function createFrame(userToken) {
 
     iframe.setAttribute(
         "src", 
-        `http://localhost:3000/embed/comment-section/userToken=${userToken || "null"}&linkedID=${getCommentID() || "null"}`
+        `http://localhost:8080/comment-section/linkedID=${getCommentID() || "null"}`
     );
 
     iframe.setAttribute("scrolling", "no");
@@ -45,6 +33,8 @@ function createFrame(userToken) {
             }
         }
     }, "#commentSectionFrame");
+
+    let popup = window.open("http://localhost:8080", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
 }
 
 function getCommentID() {
@@ -61,7 +51,9 @@ function getCommentID() {
 }
 
 function signIn() {
-    var xhr = new XMLHttpRequest();
+    let popup = window.open("http://localhost:3000/embed/auth/sign-in", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
+
+    /* var xhr = new XMLHttpRequest();
     xhr.open('POST', "http://localhost:3000/api/auth/sign-in", true);
     xhr.onload = function () {
         if (xhr.status === 200 && xhr.readyState === 4) {
@@ -80,7 +72,7 @@ function signIn() {
 
     xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
     xhr.withCredentials = true;
-    xhr.send(query);
+    xhr.send(query); */
 }
 
 function signUp() {
