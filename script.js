@@ -64,7 +64,7 @@ function signIn() {
         }
     };
 
-    const params = { email: "lesleysovvy@gmail.com", password: "Sovvy1921!!" };
+    const params = { email: "lesley@gmail.com", password: "Sovvy1921!!" };
     let query = "";
     for (key in params) {
         query += encodeURIComponent(key)+"="+encodeURIComponent(params[key])+"&";
