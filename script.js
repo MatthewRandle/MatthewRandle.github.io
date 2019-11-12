@@ -17,7 +17,7 @@ function createFrame() {
 
     iframe.setAttribute(
         "src", 
-        `https://localhost:8080/comment-section/linkedID=${getCommentID() || "null"}`
+        `http://localhost:8080/comment-section/linkedID=${getCommentID() || "null"}`
     );
 
     iframe.setAttribute("scrolling", "no");
@@ -34,7 +34,7 @@ function createFrame() {
         }
     }, "#commentSectionFrame");
 
-    let popup = window.open("https://localhost:8080", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
+    let popup = window.open("http://localhost:8080", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
 }
 
 function getCommentID() {
