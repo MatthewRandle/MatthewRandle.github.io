@@ -1,22 +1,7 @@
 let commentSection = document.getElementById("commentSection");
 let iframe;
 
-//createFrame();
-setCookie();
-getCookie();
-function setCookie() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.withCredentials = true;
-    xhttp.open("GET", "https://cryptic-harbor-25854.herokuapp.com/set-cookie", true);
-    xhttp.send();
-} 
-
-function getCookie() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.withCredentials = true;
-    xhttp.open("GET", "https://cryptic-harbor-25854.herokuapp.com/get-cookie", true);
-    xhttp.send();
-} 
+createFrame();
 
 function createFrame() { 
     iframe == null ? iframe = document.createElement("iframe") : null;
