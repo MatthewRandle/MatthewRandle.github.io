@@ -17,7 +17,7 @@ function createFrame() {
 
     iframe.setAttribute(
         "src", 
-        `http://localhost:8080/comment-section/linkedID=${getCommentID() || "null"}`
+        `https://localhost:8080/comment-section/linkedID=${getCommentID() || "null"}`
     );
 
     iframe.setAttribute("scrolling", "no");
@@ -34,7 +34,7 @@ function createFrame() {
         }
     }, "#commentSectionFrame");
 
-    let popup = window.open("http://localhost:8080", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
+    let popup = window.open("https://localhost:8080", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
 }
 
 function getCommentID() {
@@ -52,27 +52,6 @@ function getCommentID() {
 
 function signIn() {
     let popup = window.open("http://localhost:3000/embed/auth/sign-in", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
-
-    /* var xhr = new XMLHttpRequest();
-    xhr.open('POST', "http://localhost:3000/api/auth/sign-in", true);
-    xhr.onload = function () {
-        if (xhr.status === 200 && xhr.readyState === 4) {
-            iframe.setAttribute(
-                "src", 
-                `http://localhost:3000/embed/comment-section/userToken=${JSON.parse(this.response).token || "null"}&linkedID=${getCommentID() || "null"}`
-            )
-        }
-    };
-
-    const params = { email: "lesley@gmail.com", password: "Sovvy1921!!" };
-    let query = "";
-    for (key in params) {
-        query += encodeURIComponent(key)+"="+encodeURIComponent(params[key])+"&";
-    }
-
-    xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-    xhr.withCredentials = true;
-    xhr.send(query); */
 }
 
 function signUp() {
