@@ -17,7 +17,7 @@ function createFrame() {
 
     iframe.setAttribute(
         "src", 
-        `http://localhost:8080/comment-section/linkedID=${getCommentID() || "null"}`
+        `http://localhost:3000/embed/comment-section/linkedID=${getCommentID() || "null"}`
     );
 
     iframe.setAttribute("scrolling", "no");
@@ -29,12 +29,16 @@ function createFrame() {
             else if(data.message.command === "sign-in") signIn();
             else if(data.message.command === "sign-up") signUp();
             else if(data.message.command === "link") {
-                window.location.href = data.message.link;
+                window.open(data.message.link, "_self");                
             }
-        }
+            else if (data.message.command === "link-blank") {
+                window.open(data.message.link, "_blank");
+            }
+        },
+        heightCalculationMethod: 'lowestElement'
     }, "#commentSectionFrame");
 
-    let popup = window.open("http://localhost:8080", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
+    //let popup = window.open("http://localhost:3000", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
 }
 
 function getCommentID() {
@@ -51,7 +55,19 @@ function getCommentID() {
 }
 
 function signIn() {
-    let popup = window.open("http://localhost:3000/embed/auth/sign-in", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
+    let popup = window.open("http://localhost:3000/embed/sign-in", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
+
+    window.addEventListener("message", receiveMessage, false);
+
+    function receiveMessage(event) {
+        if(event.origin !== "http://localhost:3000") return;
+        if(event.data === "signed-in") {
+            popup.close();
+            iframe.contentWindow.postMessage("signed-in", "http://localhost:3000/embed/comment-section");
+
+            //iframe.src = `http://localhost:3000/embed/comment-section/linkedID=${getCommentID() || "null"}`;
+        }
+    }
 }
 
 function signUp() {
@@ -78,7 +94,7 @@ function signUp() {
 function logout() {
     var xhttp = new XMLHttpRequest();
     xhttp.withCredentials = true;
-    xhttp.open("GET", "http://localhost:3000/api/auth/logout", true);
+    xhttp.open("GET", "http://localhost:3000/api/auth/sign-out", true);
     xhttp.send();
 
     xhttp.onload = function () {
