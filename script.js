@@ -1,9 +1,21 @@
-let commentSection = document.getElementById("commentSection");
-let iframe;
+let commentSection, iframe, loaded;
+let commenzeEmail, commenzeUsername, commenzeExpiresIn;
 
-createFrame();
+window.onload = () => {
+    commentSection = document.getElementById("commentSection");
 
-function createFrame() { 
+    createFrame();
+
+    window.addEventListener("message", (event) => {
+        if (event.data.command === "logout") logout();
+        else if (event.data.command === "sign-in") signIn();
+        else if (event.data.command === "sign-up") signUp();
+        else if (event.data.command === "link") window.open(data.message.link, "_self");
+        else if (event.data.command === "link-blank") window.open(data.message.link, "_blank");
+    });
+}
+
+function createFrame() {
     iframe == null ? iframe = document.createElement("iframe") : null;
     iframe.style.width = "100%";
     iframe.style.border = "none";
@@ -16,25 +28,14 @@ function createFrame() {
     } */
 
     iframe.setAttribute(
-        "src", 
-        `http://localhost:3000/embed/comment-section/linkedID=${getCommentID() || "null"}`
+        "src",
+        `http://localhost:3000/embed/comment-section/${commenzeHostname}/linkedID=${getCommentID() || "null"}`
     );
 
     iframe.setAttribute("scrolling", "no");
     iframe.id = "commentSectionFrame";
     commentSection.appendChild(iframe);
-    iFrameResize({ 
-        onMessage: (data) => {
-            if(data.message.command === "logout") logout(); 
-            else if(data.message.command === "sign-in") signIn();
-            else if(data.message.command === "sign-up") signUp();
-            else if(data.message.command === "link") {
-                window.open(data.message.link, "_self");                
-            }
-            else if (data.message.command === "link-blank") {
-                window.open(data.message.link, "_blank");
-            }
-        },
+    iFrameResize({
         heightCalculationMethod: 'lowestElement'
     }, "#commentSectionFrame");
 
@@ -55,13 +56,13 @@ function getCommentID() {
 }
 
 function signIn() {
-    let popup = window.open("http://localhost:3000/embed/sign-in", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
+    let popup = window.open("http://localhost:3000/embed/sign-in", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=477,height=650");
 
     window.addEventListener("message", receiveMessage, false);
 
     function receiveMessage(event) {
-        if(event.origin !== "http://localhost:3000") return;
-        if(event.data === "signed-in") {
+        if (event.origin !== "http://localhost:3000") return;
+        if (event.data === "signed-in") {
             popup.close();
             iframe.contentWindow.postMessage("signed-in", "http://localhost:3000/embed/comment-section");
 
@@ -70,36 +71,32 @@ function signIn() {
     }
 }
 
-function signUp() {
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', "http://localhost:3000/api/auth/sign-up", true);
-    xhr.onload = function () {
-        if (xhr.status === 200 && xhr.readyState === 4) {
-            //createFrame(JSON.parse(this.response).token);
-            console.log(this.response)
-        }
-    };
-
-    const params = { email: "test4@hotmail.co.uk", password: "Sovvy1921!!", username: "Test4" };
-    let query = "";
-    for (key in params) {
-        query += encodeURIComponent(key) + "=" + encodeURIComponent(params[key]) + "&";
-    }
-
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    xhr.withCredentials = true;
-    xhr.send(query);
+function commenzeSignIn(email, username, expiresIn) {
+    iframe.contentWindow.postMessage({
+        message: "sso-sign-in",
+        username,
+        email,
+        expiresIn
+    }, "http://localhost:3000/embed/comment-section");  
 }
 
-function logout() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.withCredentials = true;
-    xhttp.open("GET", "http://localhost:3000/api/auth/sign-out", true);
-    xhttp.send();
+function commenzeSignOut() {
+    iframe.contentWindow.postMessage("sso-sign-out", "http://localhost:3000/embed/comment-section");
+}
 
-    xhttp.onload = function () {
-        if (xhttp.status === 200 && xhttp.readyState === 4) {
-            iframe.src =`http://localhost:3000/embed/comment-section/linkedID=${getCommentID() || "null"}`;
+function signUp() {
+    let popup = window.open("http://localhost:3000/embed/sign-up", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=477,height=725");
+
+    window.addEventListener("message", receiveMessage, false);
+
+    function receiveMessage(event) {
+        if (event.origin !== "http://localhost:3000") return;
+        if (event.data === "signed-up") {
+            console.log("SIGNED UP")
+            popup.close();
+            iframe.contentWindow.postMessage("signed-up", "http://localhost:3000/embed/comment-section");
+
+            //iframe.src = `http://localhost:3000/embed/comment-section/linkedID=${getCommentID() || "null"}`;
         }
-    };
-} 
+    }
+}
