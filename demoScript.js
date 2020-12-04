@@ -1,10 +1,14 @@
 let commentSection, iframe;
 
+function changeButtonTheme(color) {
+    iframe.contentWindow.postMessage({ message: "buttonChange", color }, "http://localhost:3000/embed/comment-section");
+}
+
 window.onload = () => {
-    iframe = document.createElement("iframe");
+    iframe = document.createElement("iframe")
     commentSection = document.getElementById("commenze_commentSection");
     commentSection.style.minHeight = "200px";
-    commentSection.style.background = "url(https://commenze.com/Logo.svg) center center no-repeat";
+    commentSection.style.background = "url(http://localhost:3000/Logo.svg) center center no-repeat";
     commentSection.style.backgroundSize = "10%";
 
     setTimeout(() => {
@@ -12,10 +16,7 @@ window.onload = () => {
 
         window.addEventListener("message", (event) => {
             if (event.data.command === "loaded") {
-                commentSection.style.background = "transparent";
-            }
-            else if(event.data.command === "resize")  {
-                iframe.style.height = event.data.height + "px";
+                commentSection.style.background = undefined;
             }
             else if (event.data.command === "sign-in") signIn();
             else if (event.data.command === "sign-up") signUp();
@@ -30,23 +31,17 @@ function createFrame() {
     iframe.style.height = "0px";
     iframe.style.border = "none";
 
-    /* if(userToken) {
-        iframe.setAttribute("src", `http://localhost:3000/embed/comment-section/${userToken}`);
-    }
-    else {
-        iframe.setAttribute("src", "http://localhost:3000/embed/comment-section");
-    } */
-
     iframe.setAttribute(
         "src",
-        `http://localhost:3000/embed/comment-section.html?referrer=${commenzeHostname}&linkedID=${getCommentID() || "null"}`
+        `http://localhost:3000/embed/comment-section/${commenzeHostname}/linkedID=${getCommentID() || "null"}`
     );
 
     iframe.setAttribute("scrolling", "no");
     iframe.id = "commentSectionFrame";
     commentSection.appendChild(iframe);
-
-    //let popup = window.open("http://localhost:3000", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
+    iFrameResize({
+        heightCalculationMethod: 'lowestElement'
+    }, "#commentSectionFrame");
 }
 
 function getCommentID() {
@@ -74,8 +69,6 @@ function signIn() {
         if (event.data === "signed-in") {
             popup.close();
             iframe.contentWindow.postMessage("signed-in", "http://localhost:3000/embed/comment-section");
-
-            //iframe.src = `http://localhost:3000/embed/comment-section/linkedID=${getCommentID() || "null"}`;
         }
     }
 }
@@ -98,18 +91,17 @@ function commenzeSignOut() {
 }
 
 function signUp() {
-    let popup = window.open("http://localhost:3000/embed/sign-up", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=477,height=725");
+    let popup;
+    if (screen.width < 769) popup = window.open("http://localhost:3000/embed/sign-up", "_blank");
+    else popup = window.open("http://localhost:3000/embed/sign-up", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=477,height=725");
 
     window.addEventListener("message", receiveMessage, false);
 
     function receiveMessage(event) {
         if (event.origin !== "http://localhost:3000") return;
         if (event.data === "signed-up") {
-            console.log("SIGNED UP")
             popup.close();
             iframe.contentWindow.postMessage("signed-up", "http://localhost:3000/embed/comment-section");
-
-            //iframe.src = `http://localhost:3000/embed/comment-section/linkedID=${getCommentID() || "null"}`;
         }
     }
 }
