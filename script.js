@@ -45,6 +45,9 @@ function createFrame() {
     iframe.setAttribute("scrolling", "no");
     iframe.id = "commentSectionFrame";
     commentSection.appendChild(iframe);
+    iFrameResize({
+        heightCalculationMethod: 'lowestElement'
+    }, "#commentSectionFrame");
 
     //let popup = window.open("http://localhost:3000", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350");
 }
