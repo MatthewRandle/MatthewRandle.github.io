@@ -1,63 +1,23 @@
 <!DOCTYPE html>
 <html>
-    <body style="height: 100vh;">
-        <a href="./index.html">Home</a>
+    <head>
+        <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1">
+    </head>
 
-        <div id="commentSection"></div>
-
+    <body style="height: 100vh; margin: 0;">
+        <button onclick='commenzeSignIn("randletester@gmail.com", "Gobernator", 300)'>Sign In</button>
+        <button onclick='commenzeSignOut()'>Sign In</button>
+        <div id="commenze_commentSection"></div>
+        <h1>TEST</h1>
+        <!-- <div id="accountPreview"></div> -->
         <br>
         <br>
         <!-- <button onclick="signIn()">Sign In</button>
         <button onclick="logout()">Logout</button> -->
-    </body>
-
-    <script src="../iframeResizer.min.js"></script>
-    <script src="./script.js"></script>
-
-    <script>
-        /* getUser();
-        function getUser() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    console.log(JSON.parse(this.response).token);
-                }
-            };
-            xhttp.withCredentials = true;
-            xhttp.open("GET", "http://localhost:3000/api/auth/get-user", true);
-            xhttp.send();
-        }
-
-        function signIn() {
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', "http://localhost:3000/api/auth/sign-in", true);
-            xhr.onload = function () {
-            if (xhr.status === 200 && xhr.readyState === 4) {
-                    console.log(JSON.parse(this.response).token);
-                }
-            };
-
-            const params = { email: "lesleysovvy@gmail.com", password: "Sovvy1921!!" };
-            let query = "";
-            for (key in params) {
-                query += encodeURIComponent(key)+"="+encodeURIComponent(params[key])+"&";
-            }
-
-            xhr.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-            xhr.withCredentials = true;
-            xhr.send(query);
-        }
-
-        function logout() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    
-                }
-            };
-            xhttp.withCredentials = true;
-            xhttp.open("GET", "http://localhost:3000/api/auth/logout", true);
-            xhttp.send();
-        } */
-    </script>
+        
+        <script src="iframeResizer.min.js"></script>
+        <script>const commenzeHostname = "commenze.com-zUhSPQR";</script>
+        <script src="./script.js"></script>
+    </body>     
+    <!-- <script src="./accountPreview.js"></script> -->
 </html>
