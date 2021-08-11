@@ -28,7 +28,7 @@ function createFrame() {
 
     iframe.setAttribute(
         "src",
-        `http://localhost:3000/embed/comment-section/comment-section.html?referrer=${commenzeHostname}&linkedID=${getCommentID() || "null"}`
+        `https://commenze.com/embed/comment-section/comment-section.html?referrer=${commenzeHostname}&linkedID=${getCommentID() || "null"}`
     );
 
     iframe.setAttribute("scrolling", "no");
@@ -54,16 +54,16 @@ function getCommentID() {
 
 function signIn() {
     let popup;
-    if (screen.width < 769) popup = window.open("http://localhost:3000/embed/sign-in", "_blank");
-    else popup = window.open("http://localhost:3000/embed/sign-in", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=477,height=650");
+    if (screen.width < 769) popup = window.open("https://commenze.com/embed/sign-in", "_blank");
+    else popup = window.open("https://commenze.com/embed/sign-in", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=477,height=650");
 
     window.addEventListener("message", receiveMessage, false);
 
     function receiveMessage(event) {
-        if (event.origin !== "http://localhost:3000") return;
+        if (event.origin !== "https://commenze.com") return;
         if (event.data === "signed-in") {
             popup.close();
-            iframe.contentWindow.postMessage("signed-in", "http://localhost:3000/embed/comment-section");
+            iframe.contentWindow.postMessage("signed-in", "https://commenze.com/embed/comment-section");
         }
     }
 }
@@ -75,27 +75,27 @@ function commenzeSignIn(email, username, expiresIn) {
             username,
             email,
             expiresIn
-        }, "http://localhost:3000/embed/comment-section");
+        }, "https://commenze.com/embed/comment-section");
     }
 }
 
 function commenzeSignOut() {
     if (iframe) {
-        iframe.contentWindow.postMessage("sso-sign-out", "http://localhost:3000/embed/comment-section");
+        iframe.contentWindow.postMessage("sso-sign-out", "https://commenze.com/embed/comment-section");
     }
 }
 
 function signUp() {
-    let popup = window.open("http://localhost:3000/embed/sign-up", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=477,height=725");
+    let popup = window.open("https://commenze.com/embed/sign-up", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=477,height=725");
 
     window.addEventListener("message", receiveMessage, false);
 
     function receiveMessage(event) {
-        if (event.origin !== "http://localhost:3000") return;
+        if (event.origin !== "https://commenze.com") return;
         if (event.data === "signed-up") {
             console.log("SIGNED UP")
             popup.close();
-            iframe.contentWindow.postMessage("signed-up", "http://localhost:3000/embed/comment-section");
+            iframe.contentWindow.postMessage("signed-up", "https://commenze.com/embed/comment-section");
         }
     }
 }
