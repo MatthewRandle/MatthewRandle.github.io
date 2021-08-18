@@ -28,7 +28,7 @@ function createFrame() {
 
     iframe.setAttribute(
         "src",
-        `https://commenze.com/embed/comment-section/comment-section.html?referrer=${commenzeHostname}&linkedID=${getCommentID() || "null"}`
+        `https://commenze.com/embed/comment-section/comment-section.html?referrer=${commenzeHostname}&url=${window.location.href}&linkedID=${getCommentID() || "null"}`
     );
 
     iframe.setAttribute("scrolling", "no");
