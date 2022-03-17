@@ -28,7 +28,7 @@ function createFrame() {
 
     iframe.setAttribute(
         "src",
-        `http://localhost:3000/embed/comment-section/comment-section.html?referrer=${commenzeHostname}&url=${window.location.href}&linkedID=${getCommentID() || "null"}`
+        `http://localhost:3000/embed/comment-section/comment-section.html?referrer=${commenzeHostname}&url=${window.location.href}&themeName=${commenzeThemeName}&linkedID=${getCommentID() || "null"}`
     );
 
     iframe.setAttribute("scrolling", "no");
