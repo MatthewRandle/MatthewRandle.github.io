@@ -5,8 +5,8 @@
     </head>
 
     <body style="height: 100vh; margin: 0;">
-        <button onclick='commenzeSignIn("randletester@gmail.com", "Gobernator", 300)'>Sign In</button>
-        <button onclick='commenzeSignOut()'>Sign In</button>
+        <button onclick='customSignIn("randletester@gmail.com", "Gobernator", 30 * 60, "commenze.com-U8F_kVu", "bc311260-6cd1-11ec-903f-339c84c61e42")'>Sign In</button>
+        <button onclick='commenzeSignOut("randletester@gmail.com", "Gobernator", "commenze.com-U8F_kVu", "bc311260-6cd1-11ec-903f-339c84c61e42")'>Sign out</button>
         <div id="commenze_commentSection"></div>
         <h1>TEST</h1>
         <!-- <div id="accountPreview"></div> -->
@@ -16,8 +16,41 @@
         <button onclick="logout()">Logout</button> -->
         
         <script src="iframeResizer.min.js"></script>
-        <script>const commenzeHostname = "commenze.com-zUhSPQR";</script>
+        <script>const commenzeHostname = "commenze.com-U8F_kVu";</script>
         <script src="./script.js"></script>
+        <script>
+            async function customSignIn(email, username, expiresIn, hostname, secret) {
+                const response = await fetch("http://localhost:3001/api/auth/sso/connect", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        email, username, expiresIn, hostname, secret
+                    }),                    
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include"
+                })
+
+                console.log(response);
+
+                if(!response.ok) {
+                    console.log(await response.json())
+                }
+            }
+            
+            async function commenzeSignOut(email, username, hostname, secret) {
+                const response = await fetch("http://localhost:3001/api/auth/sso/disconnect", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        email, username, hostname, secret
+                    }),                    
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include"
+                });
+
+                if(!response.ok) {
+                    console.log(await response.json())
+                }
+            }
+        </script>
     </body>     
     <!-- <script src="./accountPreview.js"></script> -->
 </html>
