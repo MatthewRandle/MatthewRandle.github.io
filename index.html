@@ -7,6 +7,8 @@
     <body style="height: 100vh; margin: 0;">
         <button onclick='customSignIn("randletester@gmail.com", "Gobernator", 30 * 60, "commenze.com-U8F_kVu", "bc311260-6cd1-11ec-903f-339c84c61e42")'>Sign In</button>
         <button onclick='commenzeSignOut("randletester@gmail.com", "Gobernator", "commenze.com-U8F_kVu", "bc311260-6cd1-11ec-903f-339c84c61e42")'>Sign out</button>
+        <button onclick='commenzeThemeName = "Facebook"'>FACEBOOK</button>
+        <button onclick='commenzeThemeName = "Commenze"'>Commenze</button>
         <div id="commenze_commentSection"></div>
         <h1>TEST</h1>
         <!-- <div id="accountPreview"></div> -->
@@ -16,7 +18,7 @@
         <button onclick="logout()">Logout</button> -->
         
         <script src="iframeResizer.min.js"></script>
-        <script>const commenzeThemeName = "Commenze";</script>
+        <script>let commenzeThemeName = "Commenze";</script>
         <script>const commenzeHostname = "commenze.com-U8F_kVu";</script>
         <script src="./script.js"></script>
         <script>

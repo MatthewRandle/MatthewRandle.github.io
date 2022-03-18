@@ -1,4 +1,5 @@
 let commentSection, iframe;
+let previousThemeName = commenzeThemeName;
 
 window.onload = () => {
     iframe = document.createElement("iframe");
@@ -19,6 +20,28 @@ window.onload = () => {
             else if (event.data.command === "link") window.open(event.data.link, event.data.target || "_blank");
         });
     }, 1);
+
+    listenForThemeNameChange();
+}
+
+function listenForThemeNameChange() {
+    const listen = () => {
+        if (previousThemeName !== commenzeThemeName) {
+            previousThemeName = commenzeThemeName;
+            refreshFrame();
+        }
+        
+        return setTimeout(() => listen(), 500);
+    };
+
+    listen();
+}
+
+function refreshFrame() {
+    iframe.setAttribute(
+        "src",
+        `http://localhost:3000/embed/comment-section/comment-section.html?referrer=${commenzeHostname}&url=${window.location.href}&themeName=${commenzeThemeName}&linkedID=${getCommentID() || "null"}`
+    );
 }
 
 function createFrame() {
