@@ -17,6 +17,7 @@ window.onload = () => {
             }
             else if (event.data.command === "sign-in") signIn();
             else if (event.data.command === "sign-up") signUp();
+            else if (event.data.command === "sign-in-anon") signInAnon();
             else if (event.data.command === "link") window.open(event.data.link, event.data.target || "_blank");
         });
     }, 1);
@@ -85,6 +86,22 @@ function signIn() {
     function receiveMessage(event) {
         if (event.origin !== "http://localhost:3000") return;
         if (event.data === "signed-in") {
+            popup.close();
+            iframe.contentWindow.postMessage("signed-in", "http://localhost:3000/embed/comment-section");
+        }
+    }
+}
+
+function signInAnon() {
+    let popup;
+    if (screen.width < 769) popup = window.open("http://localhost:3000/embed/sign-in-anonymous", "_blank");
+    else popup = window.open("http://localhost:3000/embed/sign-in-anonymous", "", "directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=477,height=650");
+
+    window.addEventListener("message", receiveMessage, false);
+
+    function receiveMessage(event) {
+        if (event.origin !== "http://localhost:3000") return;
+        if (event.data === "signed-in-anon") {
             popup.close();
             iframe.contentWindow.postMessage("signed-in", "http://localhost:3000/embed/comment-section");
         }
