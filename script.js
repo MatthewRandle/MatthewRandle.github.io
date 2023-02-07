@@ -5,7 +5,7 @@ window.onload = () => {
     iframe = document.createElement("iframe");
     commentSection = document.getElementById("commenze_commentSection");
     commentSection.style.minHeight = "200px";
-    commentSection.style.background = "url(https://commenze.com/Logo.svg) center center no-repeat";
+    commentSection.style.background = "url(https://commenze.com/branding/logo.svg) center center no-repeat";
     commentSection.style.backgroundSize = "10%";
 
     setTimeout(() => {
